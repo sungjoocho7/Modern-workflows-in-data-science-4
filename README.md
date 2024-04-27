@@ -16,7 +16,7 @@ The variables that are used in developing this application are as below:
 
 This repository is organized as follows:
 
--   **/data** - Contains the original WVS data set and cleaned data set used in the project.
+-   **/data** - Contains the [original WVS data set](https://github.com/sungjoocho7/Modern-workflows-in-data-science-Assignment4/blob/f3d77682486f9e5c8c12f4c2f30d8a0a20addf77/data/WV6_Data_R_v20201117.rdata.zip) and [cleaned data set](https://github.com/sungjoocho7/Modern-workflows-in-data-science-Assignment4/blob/f3d77682486f9e5c8c12f4c2f30d8a0a20addf77/data/cleaned_wvs.csv) used in the project.
 -   **/script** - Contains a R script for data cleaning and another R script to run the shiny app.
 -   **/documentation** - Contains the instructional document.
 
