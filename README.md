@@ -16,31 +16,31 @@ The variables that are used in developing this application are as below:
 
 This repository is organized as follows:
 
--   **/data** - Contains the oroginal WVS dataset and cleaned dataset used in the project.
+-   **/data** - Contains the original WVS data set and cleaned data set used in the project.
 -   **/script** - Contains a R script for data cleaning and another R script to run the shiny app.
 -   **/documentation** - Contains the instructional document.
-
 
 ## Overview of the application
 
 This application is designed to delve into data sourced from the World Value Study (WVS). Users can navigate through attitudes toward democracy, news consumption patterns, and attitudes toward science on a country-by-country basis by using the country drop-down menu located in the sidebar.
 
-The application is structured around four main tabs: Overview, Democracy, News Consumption, and Attitudes to Science. These tabs are easily accessible through the sidebar menu.
+The application is structured around four main tabs: Overview, Democracy, News Consumption, and Attitudes to Science. These tabs are easily accessible through the sidebar menu. In some cases, data may not be available for certain countries. When these countries are selected, only the tables and graphs on the entire WVS sample will be provided.
 
-The 'Democracy' section provides insights into attitudes toward democracy, referencing variables V228A-V228I from the WVS. In the 'News Consumption' section, users can explore how people consume news from various sources such as TV news, radio news, etc., referencing data from V217-V224 in the WVS. The 'Attitudes to Science' section offers a window into people's opinions and attitudes toward science, drawing from variables V192-V197 in WVS.
+-   The 'Democracy' section provides insights into attitudes toward democracy, referencing variables V228A-V228I from the WVS.
 
-Each of these sections contain plots and tabless displaying averages of questions, alongside a comprehensive table providing the entire WVS sample.
+-   In the 'News Consumption' section, users can explore how people consume news from various sources such as TV news, radio news, etc., referencing data from V217-V224 in the WVS.
 
-![](figs/overview.jpg)
-*Figure 1*
+-   The 'Attitudes to Science' section offers insights into people's opinions and attitudes toward science, from variables V192-V197 in WVS.
 
-![](figs/democracy.jpg)
-*Figure 2*
+Each of these sections contains plots and tables displaying averages of questions, alongside a comprehensive table with the information on the entire WVS sample. Below are screenshots of the application pages.
 
+![](figs/overview.jpg) *Figure 1*
+
+![](figs/democracy.jpg) *Figure 2*
 
 ## Session info:
 
-```
+```         
 R version 4.3.1 (2023-06-16)
 Platform: aarch64-apple-darwin20 (64-bit)
 Running under: macOS Ventura 13.3
@@ -72,7 +72,3 @@ loaded via a namespace (and not attached):
 [49] hms_1.1.3         memoise_2.0.1     evaluate_0.23     knitr_1.45        viridisLite_0.4.2 rlang_1.1.1       Rcpp_1.0.11       xtable_1.8-4     
 [57] glue_1.7.0        rstudioapi_0.15.0 vroom_1.6.4       jsonlite_1.8.7    R6_2.5.1         
 ```
-
-
-
-
