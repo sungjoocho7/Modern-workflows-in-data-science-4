@@ -38,7 +38,10 @@ Each of these sections contains plots and tables displaying averages of question
 
 ![](figs/democracy.jpg) *Figure 2*
 
-## URL to the application
+
+#### URL to the application:
+
+https://scho77.shinyapps.io/WVS_app/
 
 
 ## Session info:

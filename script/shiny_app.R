@@ -72,7 +72,8 @@ democracy_chart <- function(data = NULL){
       labs(title = names(demo_data)[i],
            x = "Proportion") +
       theme_minimal() +
-      theme(axis.title.y = element_blank())
+      theme(axis.title.y = element_blank(),
+            plot.title = element_text(size = 8, hjust = 0))
     
     plots[[i]] <- demo_plot
   }
@@ -137,7 +138,8 @@ news_chart <- function(data = NULL){
       labs(title = names(news_data)[i],
            x = "Proportion") +
       theme_minimal() +
-      theme(axis.title.y = element_blank())
+      theme(axis.title.y = element_blank(),
+            plot.title = element_text(size = 9, hjust = 0, margin = margin(t = 0, r = 0, b = 0, l = 0)))
     
     plots[[i]] <- news_plot
   }
@@ -216,12 +218,10 @@ science_chart <- function(data = NULL){
 
 ui <- dashboardPage(
   ## Header ##
-  dashboardHeader(title = "World Values Study (WVS)",
-                  titleWidth = 300),
+  dashboardHeader(title = "World Values Study (WVS)"),
   
   ## Slidebar ##
   dashboardSidebar(
-    width = 300,
     
     # input
     selectInput("country", "Country:", choices = countries),
@@ -236,29 +236,26 @@ ui <- dashboardPage(
   
   ## Dashboard Body ##
   dashboardBody(
-    tags$head(
-      tags$style(HTML(".main-sidebar { font-size: 23px; }"))
-    ),
     
     tabItems(
       
       # First tab content
       tabItem(
         tabName = "Overview",
-        h1("Overview of the Application"),
-        h2("Introduction"),
-        h3("This application is designed to delve into data sourced from the World Value Study (WVS). Users can navigate through attitudes toward democracy, news consumption patterns, and attitudes toward science on a country-by-country basis by using the country drop-down menu located in the sidebar."),
-        h2("Section Information"),
-        h3("The application is structured around four main tabs: Overview, Democracy, News Consumption, and Attitudes to Science. These tabs are easily accessible through the sidebar menu. In some cases, data may not be available for certain countries. When these countries are selected, only the tables and graphs on the entire WVS sample will be provided."),
+        h2("Overview of the Application"),
+        h3("Introduction"),
+        h4("This application is designed to delve into data sourced from the World Value Study (WVS). Users can navigate through attitudes toward democracy, news consumption patterns, and attitudes toward science on a country-by-country basis by using the country drop-down menu located in the sidebar."),
+        h3("Section Information"),
+        h4("The application is structured around four main tabs: Overview, Democracy, News Consumption, and Attitudes to Science. These tabs are easily accessible through the sidebar menu. In some cases, data may not be available for certain countries. When these countries are selected, only the tables and graphs on the entire WVS sample will be provided."),
         
         tags$ul(
-          style = "font-size: 23px; list-style-type: disc",
+          style = "font-size: 18px; list-style-type: disc",
           tags$li("The 'Democracy' section provides insights into attitudes toward democracy, referencing variables V228A-V228I from the WVS."),
           tags$li("In the 'News Consumption' section, users can explore how people consume news from various sources such as TV news, radio news, etc., referencing data from V217-V224 in the WVS."),
           tags$li("The 'Attitudes to Science' section offers insights into people's opinions and attitudes toward science, from variables V192-V197 in WVS.")
           ),
         
-        h3("Each of these sections contains plots and tables displaying averages of questions, alongside a comprehensive table with the information on the entire WVS sample.")
+        h4("Each of these sections contains plots and tables displaying averages of questions, alongside a comprehensive table with the information on the entire WVS sample.")
       ),
       
       # Second tab content
@@ -267,18 +264,17 @@ ui <- dashboardPage(
         h1("Attitudes to Democracy"),
         
         fluidPage(
-          tags$style(type="text/css", ".dataTables_wrapper table { font-size: 22px !important; }"),
           
-          h2("Overall"),
-          h3("Table of the average values of the questions with the entire WVS sample:"),
+          h3("Overall"),
+          h4("Table of the average values of the questions with the entire WVS sample:"),
           dataTableOutput("table_overall_democracy"),
           
           
-          h2(uiOutput("selected_country_democracy")),
-          h3("Table of the average values of the questions:"),
+          h3(uiOutput("selected_country_democracy")),
+          h4("Table of the average values of the questions:"),
           dataTableOutput("table_democracy"),
           
-          h3("Plots of the average values of the questions:"),
+          h4("Plots of the average values of the questions:"),
           fluidRow(
             column(4, plotlyOutput("plot_democracy1")),
             column(4, plotlyOutput("plot_democracy2")),
@@ -305,16 +301,15 @@ ui <- dashboardPage(
         h1("News Consumption"),
         
         fluidPage(
-          tags$style(type="text/css", ".dataTables_wrapper table { font-size: 22px !important; }"),
-          h2("Overall"),
-          h3("Table of the average values of the questions with the entire WVS sample:"),
+          h3("Overall"),
+          h4("Table of the average values of the questions with the entire WVS sample:"),
           dataTableOutput("table_overall_news"),
           
-          h2(uiOutput("selected_country_news")),
-          h3("Table of the average values of the questions:"),
+          h3(uiOutput("selected_country_news")),
+          h4("Table of the average values of the questions:"),
           dataTableOutput("table_news"),
 
-          h3("Plots of the average values of the questions:"),          
+          h4("Plots of the average values of the questions:"),          
           fluidRow(
             column(4, plotlyOutput("plot_news1")),
             column(4, plotlyOutput("plot_news2")),
@@ -337,19 +332,18 @@ ui <- dashboardPage(
       # Fourth tab content
       tabItem(
         tabName = "Attitudes_to_Science",
-        h1("Attitudes to Science"),
+        h2("Attitudes to Science"),
         
         fluidPage(
-          tags$style(type="text/css", ".dataTables_wrapper table { font-size: 22px !important; }"),
-          h2("Overall"),
-          h3("Table of the average values of the questions with the entire WVS sample:"),
+          h3("Overall"),
+          h4("Table of the average values of the questions with the entire WVS sample:"),
           dataTableOutput("table_overall_science"),
           
-          h2(uiOutput("selected_country_science")),
-          h3("Table of the average values of the questions:"),
+          h3(uiOutput("selected_country_science")),
+          h4("Table of the average values of the questions:"),
           dataTableOutput("table_science"),
           
-          h3("Plot of the average values of the questions:"),
+          h4("Plot of the average values of the questions:"),
           fluidRow(
             column(
               width = 8, offset = 2,
