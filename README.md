@@ -38,6 +38,9 @@ Each of these sections contains plots and tables displaying averages of question
 
 ![](figs/democracy.jpg) *Figure 2*
 
+## URL to the application
+
+
 ## Session info:
 
 ```         
