@@ -6,11 +6,15 @@ library(shinydashboard)
 library(haven)
 
 
-# Data
+## Data
 cleaned_wvs <- read_csv("data/cleaned_wvs.csv")
 countries <- unique(cleaned_wvs$country)
 
-# Functions for tables and charts
+
+
+
+
+## Functions for tables and charts
 
 ### 1. Democracy - table ###
 democracy_table <- function(data = NULL){
@@ -23,7 +27,7 @@ democracy_table <- function(data = NULL){
   demo_data <- data[2:10]
   
   if(all(is.na(unlist(demo_data)))) {
-    return("The data for the selected country is not available")
+    return("The data for the selected country is unavailable. Please select another country.")
   }
   demo_data <- na.omit(demo_data)
   
@@ -40,11 +44,17 @@ democracy_table <- function(data = NULL){
   return(as.data.frame(demo_tab))
 }
 
+
+
 ### 1. Democracy - chart ###
 democracy_chart <- function(data = NULL){
   
   # filter based on country
   demo_data <- data[2:10]
+  
+  if(all(is.na(unlist(demo_data)))) {
+    return(list("a", "b", "c", "d", "e", "f", "g", "h", "i"))
+  }
   demo_data <- na.omit(demo_data)
   
   plots <- list()
@@ -69,6 +79,8 @@ democracy_chart <- function(data = NULL){
   return(plots)
 }
 
+
+
 ### 2. News - table ###
 news_table <- function(data = NULL){
   
@@ -78,6 +90,10 @@ news_table <- function(data = NULL){
   
   # filter based on country
   news_data <- data[11:18]
+  
+  if(all(is.na(unlist(news_data)))) {
+    return("The data for the selected country is unavailable. Please select another country.")
+  }
   news_data <- na.omit(news_data)
   
   # iterate through each democracy variable
@@ -93,11 +109,16 @@ news_table <- function(data = NULL){
   return(as.data.frame(news_tab))
 }
 
+
+
 ### 2. News - chart ###
 news_chart <- function(data = NULL){
   
   # filter based on country
   news_data <- data[11:18]
+  if(all(is.na(unlist(news_data)))) {
+    return(list("a", "b", "c", "d", "e", "f", "g", "h"))
+  }
   news_data <- na.omit(news_data)
   
   plots <- list()
@@ -123,7 +144,9 @@ news_chart <- function(data = NULL){
   return(plots)
 }
 
-# 3. Science - table
+
+
+### 3. Science - table ###
 science_table <- function(data = NULL){
   
   # empty data frame
@@ -132,6 +155,9 @@ science_table <- function(data = NULL){
   
   # filter based on country
   science_data <- data[19:24]
+  if(all(is.na(unlist(science_data)))){
+    return("The data for the selected country is unavailable. Please select another country.")
+  }
   science_data <- na.omit(science_data)
   
   # iterate through each democracy variable
@@ -147,7 +173,9 @@ science_table <- function(data = NULL){
   return(as.data.frame(science_tab))
 }
 
-# 3. Science - chart
+
+
+### 3. Science - chart ###
 science_chart <- function(data = NULL){
   
   # empty data frame
@@ -185,6 +213,7 @@ science_chart <- function(data = NULL){
 
 
 ## Shiny
+
 ui <- dashboardPage(
   ## Header ##
   dashboardHeader(title = "World Values Study (WVS)",
@@ -207,39 +236,49 @@ ui <- dashboardPage(
   
   ## Dashboard Body ##
   dashboardBody(
+    tags$head(
+      tags$style(HTML(".main-sidebar { font-size: 23px; }"))
+    ),
+    
     tabItems(
       
       # First tab content
       tabItem(
         tabName = "Overview",
-        h2("Overview of the Application"),
-        h3("Introduction"),
-        h4("This application is designed to delve into data sourced from the World Value Study (WVS). Users can navigate through attitudes toward democracy, news consumption patterns, and attitudes toward science on a country-by-country basis by using the country drop-down menu located in the sidebar."),
-        h3("Section Info"),
-        h4("The application is structured around four main tabs: Overview, Democracy, News Consumption, and Attitudes to Science. These tabs are easily accessible through the sidebar menu."),
+        h1("Overview of the Application"),
+        h2("Introduction"),
+        h3("This application is designed to delve into data sourced from the World Value Study (WVS). Users can navigate through attitudes toward democracy, news consumption patterns, and attitudes toward science on a country-by-country basis by using the country drop-down menu located in the sidebar."),
+        h2("Section Information"),
+        h3("The application is structured around four main tabs: Overview, Democracy, News Consumption, and Attitudes to Science. These tabs are easily accessible through the sidebar menu. In some cases, data may not be available for certain countries. When these countries are selected, only the tables and graphs on the entire WVS sample will be provided"),
         
         tags$ul(
-          style = "font-size: 18px; list-style-type: disc",
+          style = "font-size: 23px; list-style-type: disc",
           tags$li("The 'Democracy' section provides insights into attitudes toward democracy, referencing variables V228A-V228I from the WVS."),
           tags$li("In the 'News Consumption' section, users can explore how people consume news from various sources such as TV news, radio news, etc., referencing data from V217-V224 in the WVS."),
-          tags$li("The 'Attitudes to Science' section offers a window into people's opinions and attitudes toward science, drawing from variables V192-V197 in WVS.")
+          tags$li("The 'Attitudes to Science' section offers insights into people's opinions and attitudes toward science, from variables V192-V197 in WVS.")
           ),
         
-        h4("Each of these sections contain plots and tables displaying averages of questions, alongside a comprehensive table providing the entire WVS sample.")
+        h3("Each of these sections contain plots and tables displaying averages of questions, alongside a comprehensive table with the information on the entire WVS sample.")
       ),
       
       # Second tab content
       tabItem(
         tabName = "Democracy",
-        h2("Attitudes to Democracy"),
-        
-        h3(uiOutput("selected_country_democracy")),
-        h4("Table of the average values of the questions:"),
+        h1("Attitudes to Democracy"),
         
         fluidPage(
+          tags$style(type="text/css", ".dataTables_wrapper table { font-size: 22px !important; }"),
+          
+          h2("Overall"),
+          h3("Table of the average values of the questions with the entire WVS sample:"),
+          dataTableOutput("table_overall_democracy"),
+          
+          
+          h2(uiOutput("selected_country_democracy")),
+          h3("Table of the average values of the questions:"),
           dataTableOutput("table_democracy"),
           
-          h4("Plots of the average values of the questions:"),
+          h3("Plots of the average values of the questions:"),
           fluidRow(
             column(4, plotlyOutput("plot_democracy1")),
             column(4, plotlyOutput("plot_democracy2")),
@@ -256,25 +295,26 @@ ui <- dashboardPage(
             column(4, plotlyOutput("plot_democracy7")),
             column(4, plotlyOutput("plot_democracy8")),
             column(4, plotlyOutput("plot_democracy9"))
-          ),
-          
-          h3("Overall"),
-          h4("Table of the average values of the questions with the entire WVS sample:"),
-          dataTableOutput("table_overall_democracy")
+          )
         ) 
       ),
       
       # Third tab content
       tabItem(
         tabName = "News_Consumption",
-        h2("News Consumption"),
-        
-        h3(uiOutput("selected_country_news")),
-        h4("Table of the average values of the questions:"),
+        h1("News Consumption"),
         
         fluidPage(
+          tags$style(type="text/css", ".dataTables_wrapper table { font-size: 22px !important; }"),
+          h2("Overall"),
+          h3("Table of the average values of the questions with the entire WVS sample:"),
+          dataTableOutput("table_overall_news"),
+          
+          h2(uiOutput("selected_country_news")),
+          h3("Table of the average values of the questions:"),
           dataTableOutput("table_news"),
 
+          h3("Plots of the average values of the questions:"),          
           fluidRow(
             column(4, plotlyOutput("plot_news1")),
             column(4, plotlyOutput("plot_news2")),
@@ -290,36 +330,32 @@ ui <- dashboardPage(
           fluidRow(
             column(4, plotlyOutput("plot_news7")),
             column(4, plotlyOutput("plot_news8")),
-          ),
-          
-          h3("Overall"),
-          h4("Table of the average values of the questions with the entire WVS sample:"),
-          dataTableOutput("table_overall_news")
+          )
         )
       ),
 
       # Fourth tab content
       tabItem(
         tabName = "Attitudes_to_Science",
-        h2("Attitudes to Science"),
-        
-        h3(uiOutput("selected_country_science")),
-        h4("Table of the average values of the questions:"),
+        h1("Attitudes to Science"),
         
         fluidPage(
+          tags$style(type="text/css", ".dataTables_wrapper table { font-size: 22px !important; }"),
+          h2("Overall"),
+          h3("Table of the average values of the questions with the entire WVS sample:"),
+          dataTableOutput("table_overall_science"),
+          
+          h2(uiOutput("selected_country_science")),
+          h3("Table of the average values of the questions:"),
           dataTableOutput("table_science"),
           
-          h4("Plot of the average values of the questions:"),
+          h3("Plot of the average values of the questions:"),
           fluidRow(
             column(
               width = 8, offset = 2,
               plotlyOutput("plot_science", width = "100%", height = "600px"),
             )
-          ),
-          
-          h3("Overall"),
-          h4("Table of the average values of the questions with the entire WVS sample:"),
-          dataTableOutput("table_overall_science")
+          )
         )
       )
     )
@@ -344,52 +380,92 @@ server <- function(input, output){
   
   output$table_democracy <- renderDataTable({
     req(country_wvs())
-    democracy_table(country_wvs())
+    democracy_data <- democracy_table(country_wvs())
+    validate(
+      need(!is.character(democracy_data), "The data for the selected country is unavailable. Please select another country.")
+    )
+    return(democracy_data)
   })
   
   output$plot_democracy1 <- renderPlotly({
     req(country_wvs())
-    democracy_chart(country_wvs())[[1]]
+    democracy_data_plot1 <- democracy_chart(country_wvs())[[1]]
+    validate(
+      need(!is.character(democracy_data_plot1), "The data for the selected country is unavailable. Please select another country.")
+    )
+    return(democracy_data_plot1)
   })
   
   output$plot_democracy2 <- renderPlotly({
     req(country_wvs())
-    democracy_chart(country_wvs())[[2]]
+    democracy_data_plot2 <- democracy_chart(country_wvs())[[2]]
+    validate(
+      need(!is.character(democracy_data_plot2), "")
+    )
+    return(democracy_data_plot2)
   })
   
   output$plot_democracy3 <- renderPlotly({
     req(country_wvs())
-    democracy_chart(country_wvs())[[3]]
+    democracy_data_plot3 <- democracy_chart(country_wvs())[[3]]
+    validate(
+      need(!is.character(democracy_data_plot3), "")
+    )
+    return(democracy_data_plot3)
   })
   
   output$plot_democracy4 <- renderPlotly({
     req(country_wvs())
-    democracy_chart(country_wvs())[[4]]
+    democracy_data_plot4 <- democracy_chart(country_wvs())[[4]]
+    validate(
+      need(!is.character(democracy_data_plot4), "")
+    )
+    return(democracy_data_plot4)
   })
   
   output$plot_democracy5 <- renderPlotly({
     req(country_wvs())
-    democracy_chart(country_wvs())[[5]]
+    democracy_data_plot5 <- democracy_chart(country_wvs())[[5]]
+    validate(
+      need(!is.character(democracy_data_plot5), "")
+    )
+    return(democracy_data_plot5)
   })
   
   output$plot_democracy6 <- renderPlotly({
     req(country_wvs())
-    democracy_chart(country_wvs())[[6]]
+    democracy_data_plot6 <- democracy_chart(country_wvs())[[6]]
+    validate(
+      need(!is.character(democracy_data_plot6), "")
+    )
+    return(democracy_data_plot6)
   })
   
   output$plot_democracy7 <- renderPlotly({
     req(country_wvs())
-    democracy_chart(country_wvs())[[7]]
+    democracy_data_plot7 <- democracy_chart(country_wvs())[[7]]
+    validate(
+      need(!is.character(democracy_data_plot7), "")
+    )
+    return(democracy_data_plot7)
   })
   
   output$plot_democracy8 <- renderPlotly({
     req(country_wvs())
-    democracy_chart(country_wvs())[[8]]
+    democracy_data_plot8 <- democracy_chart(country_wvs())[[8]]
+    validate(
+      need(!is.character(democracy_data_plot8), "")
+    )
+    return(democracy_data_plot8)
   })
   
   output$plot_democracy9 <- renderPlotly({
     req(country_wvs())
-    democracy_chart(country_wvs())[[9]]
+    democracy_data_plot9 <- democracy_chart(country_wvs())[[9]]
+    validate(
+      need(!is.character(democracy_data_plot9), "")
+    )
+    return(democracy_data_plot9)
   })
   
   output$table_overall_democracy <- renderDataTable({
@@ -402,61 +478,100 @@ server <- function(input, output){
   
   output$table_news <- renderDataTable({
     req(country_wvs())
+    news_data <- news_table(country_wvs())
+    validate(
+      need(!is.character(news_data), "The data for the selected country is unavailable. Please select another country.")
+    )
     news_table(country_wvs())
   })
   
   output$plot_news1 <- renderPlotly({
     req(country_wvs())
-    news_chart(country_wvs())[[1]]
+    news_data_plot1 <- news_chart(country_wvs())[[1]]
+    validate(
+      need(!is.character(news_data_plot1), "The data for the selected country is unavailable. Please select another country.")
+    )
+    return(news_data_plot1)
   })
   
   output$plot_news2 <- renderPlotly({
     req(country_wvs())
-    news_chart(country_wvs())[[2]]
+    news_data_plot2 <- news_chart(country_wvs())[[2]]
+    validate(
+      need(!is.character(news_data_plot2), "")
+    )
+    return(news_data_plot2)
   })
   
   output$plot_news3 <- renderPlotly({
     req(country_wvs())
-    news_chart(country_wvs())[[3]]
+    news_data_plot3 <- news_chart(country_wvs())[[3]]
+    validate(
+      need(!is.character(news_data_plot3), "")
+    )
+    return(news_data_plot3)
   })
   
   output$plot_news4 <- renderPlotly({
     req(country_wvs())
-    news_chart(country_wvs())[[4]]
+    news_data_plot4 <- news_chart(country_wvs())[[4]]
+    validate(
+      need(!is.character(news_data_plot4), "")
+    )
+    return(news_data_plot4)
   })
   
   output$plot_news5 <- renderPlotly({
     req(country_wvs())
-    news_chart(country_wvs())[[5]]
+    news_data_plot5 <- news_chart(country_wvs())[[5]]
+    validate(
+      need(!is.character(news_data_plot5), "")
+    )
+    return(news_data_plot5)
   })
   
   output$plot_news6 <- renderPlotly({
     req(country_wvs())
-    news_chart(country_wvs())[[6]]
+    news_data_plot6 <- news_chart(country_wvs())[[6]]
+    validate(
+      need(!is.character(news_data_plot6), "")
+    )
+    return(news_data_plot6)
   })
   
   output$plot_news7 <- renderPlotly({
     req(country_wvs())
-    news_chart(country_wvs())[[7]]
+    news_data_plot7 <- news_chart(country_wvs())[[7]]
+    validate(
+      need(!is.character(news_data_plot7), "")
+    )
+    return(news_data_plot7)
   })
   
   output$plot_news8 <- renderPlotly({
     req(country_wvs())
-    news_chart(country_wvs())[[8]]
+    news_data_plot8 <- news_chart(country_wvs())[[8]]
+    validate(
+      need(!is.character(news_data_plot8), "")
+    )
+    return(news_data_plot8)
   })
   
   output$table_overall_news <- renderDataTable({
-    democracy_table(cleaned_wvs)
+    news_table(cleaned_wvs)
   })
   
 
-  
   ### Science ###
   output$selected_country_science <- renderText({input$country})
   
   output$table_science <- renderDataTable({
     req(country_wvs())
-    science_table(country_wvs())
+    science_data <- science_table(country_wvs())
+    validate(
+      need(!is.character(science_data), "The data for the selected country is unavailable. Please select another country.")
+    )
+    return(science_data)
   })
   
   output$plot_science <- renderPlotly({
@@ -469,7 +584,6 @@ server <- function(input, output){
   })
   
 }
-
 
 
 
