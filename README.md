@@ -31,6 +31,12 @@ The 'Democracy' section provides insights into attitudes toward democracy, refer
 
 Each of these sections contain plots and tabless displaying averages of questions, alongside a comprehensive table providing the entire WVS sample.
 
+![](figs/overview.jpg)
+*Figure 1*
+
+![](figs/democracy.jpg)
+*Figure 2*
+
 
 ## Session info:
 
